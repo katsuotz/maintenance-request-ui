@@ -1,11 +1,11 @@
 import Card from "@/components/base/card";
-import Badge from "@/components/base/badge";
 import MaintenanceRequestCard from "@/components/maintenance-request/maintenance-request-card";
-import { Main } from "next/document";
+import Button from "@/components/base/button";
+import { FiPlus } from "react-icons/fi";
 
 export default function Home() {
   return (
-    <div className="container mx-auto flex flex-col items-center mt-24 gap-8">
+    <div className="container mx-auto flex flex-col items-center mt-24 gap-8 max-w-[636px] relative pb-20">
       <h1 className="text-2xl font-bold">Maintenance Request</h1>
       <div className="flex gap-8">
         <Card className="col-span-4 w-[120px] flex flex-col justify-center items-center text-center px-3 py-4">
@@ -22,7 +22,7 @@ export default function Home() {
         </Card>
       </div>
 
-      <div className="w-full max-w-[636px] flex flex-col gap-4">
+      <div className="w-full flex flex-col gap-4">
         <MaintenanceRequestCard
           title={"Front Door Lock broken"}
           date={"11 Dec 2024"}
@@ -48,6 +48,14 @@ export default function Home() {
           status={"resolved"}
         />
       </div>
+
+      <Button
+        rounded
+        className="size-13 p-0 flex justify-center items-center absolute right-0 bottom-0"
+        to="/new-request"
+      >
+        <FiPlus className="size-4.5" />
+      </Button>
     </div>
   );
 }
