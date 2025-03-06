@@ -32,6 +32,7 @@ class MetricsStore {
 
     this.eventSource.onmessage = (event) => {
       try {
+        this.error = null;
         const newData = JSON.parse(event.data);
 
         runInAction(() => {

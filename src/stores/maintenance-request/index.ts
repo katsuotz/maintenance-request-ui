@@ -42,6 +42,7 @@ class MaintenanceRequestStore {
   loading: boolean = true;
   loadingAction: boolean = false;
   error: string | null = null;
+  errorAction: string | null = null;
   schema = z.object({
     title: z.string().min(1, "Title is required"),
     urgency: z.string().min(1, "Urgency is required"),
@@ -80,9 +81,10 @@ class MaintenanceRequestStore {
   }
 
   async fetchAllData(forceRefetch = false) {
-    try {
-      this.loading = true;
+    this.error = null;
+    if (!forceRefetch) this.loading = true;
 
+    try {
       const { data } = await client.query({
         query: GET_MAINTENANCE_REQUESTS,
         fetchPolicy: forceRefetch ? "network-only" : "cache-first",
@@ -101,8 +103,9 @@ class MaintenanceRequestStore {
   }
 
   async fetchDataById(id: number) {
+    this.loading = true;
+
     try {
-      this.loading = true;
       const { data } = await client.query({
         query: GET_MAINTENANCE_REQUEST_BY_ID,
         variables: {
@@ -113,18 +116,22 @@ class MaintenanceRequestStore {
       const { title, description, urgency, status } =
         data.maintenanceRequest as MaintenanceRequestInterface;
 
-      this.formData = {
-        id,
-        title,
-        description,
-        urgency,
-        status,
-      };
-      this.isResolved = status === "resolved";
-      this.loading = false;
+      runInAction(() => {
+        this.formData = {
+          id,
+          title,
+          description,
+          urgency,
+          status,
+        };
+        this.isResolved = status === "resolved";
+        this.loading = false;
+      });
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "An error occurred";
-      this.loading = false;
+      runInAction(() => {
+        this.error = err instanceof Error ? err.message : "An error occurred";
+        this.loading = false;
+      });
     }
   }
 
@@ -189,26 +196,34 @@ class MaintenanceRequestStore {
   async submitForm() {
     if (!this.validateForm()) return;
 
-    try {
-      this.loadingAction = true;
+    this.errorAction = null;
+    this.loadingAction = true;
 
+    try {
       if (this.formData.id) {
         await this.updateRequest();
       } else {
         await this.createRequest();
       }
 
-      this.loadingAction = false;
+      runInAction(() => {
+        this.loadingAction = false;
+      });
       window.location.href = "/";
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "An error occurred";
-      this.loadingAction = false;
+      runInAction(() => {
+        this.errorAction =
+          err instanceof Error ? err.message : "An error occurred";
+        this.loadingAction = false;
+      });
     }
   }
 
   async markAsResolved(request: MaintenanceRequestInterface) {
+    this.errorAction = null;
+    this.loadingAction = true;
+
     try {
-      this.loadingAction = true;
       await client.mutate({
         mutation: UPDATE_MAINTENANCE_REQUEST,
         variables: {
@@ -219,11 +234,16 @@ class MaintenanceRequestStore {
         },
       });
 
-      this.loadingAction = false;
-      request.status = "resolved";
+      runInAction(() => {
+        this.loadingAction = false;
+        request.status = "resolved";
+      });
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "An error occurred";
-      this.loadingAction = false;
+      runInAction(() => {
+        this.errorAction =
+          err instanceof Error ? err.message : "An error occurred";
+        this.loadingAction = false;
+      });
     }
   }
 }

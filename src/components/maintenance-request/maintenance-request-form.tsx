@@ -6,12 +6,19 @@ import FormLabel from "@/components/base/form/form-label";
 import FormInput from "@/components/base/form/form-input";
 import FormGroup from "@/components/base/form/form-group";
 import FormTextarea from "@/components/base/form/form-textarea";
-import { ChangeEvent, FormEvent } from "react";
+import { ChangeEvent, FormEvent, useEffect } from "react";
 import FormSelect from "@/components/base/form/form-select";
 import { Status, UrgencyLevel } from "@/utils/const";
 import maintenanceRequestStore from "@/stores/maintenance-request";
+import { runInAction } from "mobx";
 
 const NewRequest: React.FC = observer(() => {
+  useEffect(() => {
+    runInAction(() => {
+      maintenanceRequestStore.errorAction = null;
+    });
+  }, []);
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     maintenanceRequestStore.submitForm();
@@ -84,6 +91,10 @@ const NewRequest: React.FC = observer(() => {
           }}
         />
       </FormGroup>
+
+      {maintenanceRequestStore.errorAction && (
+        <p className="text-danger">{maintenanceRequestStore.errorAction}</p>
+      )}
 
       <Button
         type="submit"
