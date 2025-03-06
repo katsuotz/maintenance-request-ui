@@ -7,6 +7,7 @@ import maintenanceRequestStore, {
   MaintenanceRequestInterface,
 } from "@/stores/maintenance-request";
 import { observer } from "mobx-react-lite";
+import Link from "next/link";
 
 type MaintenanceRequestCardProps = {
   request: MaintenanceRequestInterface;
@@ -18,7 +19,9 @@ const MaintenanceRequestCard = observer<MaintenanceRequestCardProps>(
     return (
       <Card className={cn("text-sm flex flex-col gap-2", className)}>
         <div className="flex items-center justify-between">
-          <p>{request.title}</p>
+          <Link href={`/request/${request.id}`} className="flex-grow">
+            <p>{request.title}</p>
+          </Link>
           <span className="text-xs text-secondary">
             {dayjs(request.createdAt).format("DD MMM YYYY")}
           </span>

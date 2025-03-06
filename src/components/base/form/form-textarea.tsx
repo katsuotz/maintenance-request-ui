@@ -18,6 +18,7 @@ const FormTextarea: React.FC<TextareaProps> = ({
         "shadow-[0_8px_32px_0_rgba(110,113,145,.12)] backdrop-blur-md",
         "text-sm",
         "focus:outline-none",
+        "disabled:opacity-70 disabled:cursor-not-allowed",
         error && "border-danger",
         className,
       )}

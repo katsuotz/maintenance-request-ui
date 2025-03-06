@@ -3,12 +3,13 @@ import { z } from "zod";
 import client from "@/utils/apollo-client";
 import {
   CREATE_MAINTENANCE_REQUEST,
+  GET_MAINTENANCE_REQUEST_BY_ID,
   GET_MAINTENANCE_REQUESTS,
   UPDATE_MAINTENANCE_REQUEST,
 } from "@/stores/maintenance-request/query";
 
 export interface MaintenanceRequestInterface {
-  id?: number;
+  id?: number | null;
   title: string;
   description: string;
   status: string;
@@ -29,7 +30,8 @@ type MaintenanceRequestKey = keyof MaintenanceRequestForm;
 
 class MaintenanceRequestStore {
   listData: MaintenanceRequestInterface[] = [];
-  formData: MaintenanceRequestForm = {
+  formData: MaintenanceRequestForm & { id: number | null } = {
+    id: null,
     title: "",
     status: "open",
     urgency: "",
@@ -38,11 +40,13 @@ class MaintenanceRequestStore {
   isFormFilled: boolean = false;
   errors: FormErrors = {};
   loading: boolean = true;
+  loadingAction: boolean = false;
   error: string | null = null;
   schema = z.object({
     title: z.string().min(1, "Title is required"),
     urgency: z.string().min(1, "Urgency is required"),
   });
+  isResolved: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -60,11 +64,19 @@ class MaintenanceRequestStore {
       },
     );
     reaction(
-      () => this.formData,
-      (value) => {
-        this.isFormFilled = !!(value.title && value.urgency);
+      () => [this.formData.title, this.formData.urgency],
+      ([title, urgency]) => {
+        this.isFormFilled = !!(title && urgency);
       },
     );
+  }
+
+  get isInputDisabled() {
+    return this.isResolved || this.loadingAction;
+  }
+
+  get isSubmitDisabled() {
+    return !this.isFormFilled || this.isResolved || this.loadingAction;
   }
 
   async fetchAllData() {
@@ -75,6 +87,34 @@ class MaintenanceRequestStore {
       });
 
       this.listData = data.maintenanceRequests;
+      this.loading = false;
+    } catch (err) {
+      this.error = err instanceof Error ? err.message : "An error occurred";
+      this.loading = false;
+    }
+  }
+
+  async fetchDataById(id: number) {
+    try {
+      this.loading = true;
+      const { data } = await client.query({
+        query: GET_MAINTENANCE_REQUEST_BY_ID,
+        variables: {
+          id,
+        },
+      });
+
+      const { title, description, urgency, status } =
+        data.maintenanceRequest as MaintenanceRequestInterface;
+
+      this.formData = {
+        id,
+        title,
+        description,
+        urgency,
+        status,
+      };
+      this.isResolved = status === "resolved";
       this.loading = false;
     } catch (err) {
       this.error = err instanceof Error ? err.message : "An error occurred";
@@ -111,33 +151,58 @@ class MaintenanceRequestStore {
     return true;
   }
 
+  async createRequest() {
+    return await client.mutate({
+      mutation: CREATE_MAINTENANCE_REQUEST,
+      variables: {
+        data: {
+          title: this.formData.title,
+          description: this.formData.description,
+          status: this.formData.status,
+          urgency: this.formData.urgency,
+        },
+      },
+    });
+  }
+
+  async updateRequest() {
+    return await client.mutate({
+      mutation: UPDATE_MAINTENANCE_REQUEST,
+      variables: {
+        id: this.formData.id,
+        data: {
+          title: this.formData.title,
+          description: this.formData.description,
+          status: this.formData.status,
+          urgency: this.formData.urgency,
+        },
+      },
+    });
+  }
+
   async submitForm() {
     if (!this.validateForm()) return;
 
     try {
-      this.loading = true;
-      await client.mutate({
-        mutation: CREATE_MAINTENANCE_REQUEST,
-        variables: {
-          data: {
-            title: this.formData.title,
-            description: this.formData.description,
-            status: this.formData.status,
-            urgency: this.formData.urgency,
-          },
-        },
-      });
+      this.loadingAction = true;
 
-      this.loading = false;
+      if (this.formData.id) {
+        await this.updateRequest();
+      } else {
+        await this.createRequest();
+      }
+
+      this.loadingAction = false;
       window.location.href = "/";
     } catch (err) {
       this.error = err instanceof Error ? err.message : "An error occurred";
-      this.loading = false;
+      this.loadingAction = false;
     }
   }
 
   async markAsResolved(request: MaintenanceRequestInterface) {
     try {
+      this.loadingAction = true;
       await client.mutate({
         mutation: UPDATE_MAINTENANCE_REQUEST,
         variables: {
@@ -148,9 +213,11 @@ class MaintenanceRequestStore {
         },
       });
 
+      this.loadingAction = false;
       request.status = "resolved";
     } catch (err) {
       this.error = err instanceof Error ? err.message : "An error occurred";
+      this.loadingAction = false;
     }
   }
 }

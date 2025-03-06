@@ -16,11 +16,12 @@ const FormSelect: React.FC<SelectProps> = ({
     <div className="relative w-full">
       <select
         className={cn(
-          "w-full h-12 rounded-xl border border-white/50 px-4 pr-10 py-3", // Add pr-10 for spacing
-          "bg-gradient-to-b from-white/90 to-white/70 appearance-none", // Remove default arrow
+          "w-full h-12 rounded-xl border border-white/50 px-4 pr-10 py-3",
+          "bg-gradient-to-b from-white/90 to-white/70 appearance-none",
           "shadow-[0_8px_32px_0_rgba(110,113,145,.12)] backdrop-blur-md",
           "text-sm",
           "focus:outline-none",
+          "disabled:opacity-70 disabled:cursor-not-allowed",
           error && "border-danger",
           className,
         )}

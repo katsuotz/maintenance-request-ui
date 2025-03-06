@@ -28,6 +28,7 @@ const NewRequest: React.FC = observer(() => {
           name="urgency"
           value={maintenanceRequestStore.formData.urgency}
           error={maintenanceRequestStore.errors.urgency}
+          disabled={maintenanceRequestStore.isInputDisabled}
           onChange={(e: ChangeEvent<HTMLSelectElement>) => {
             maintenanceRequestStore.setFormData("urgency", e.target.value);
           }}
@@ -46,6 +47,7 @@ const NewRequest: React.FC = observer(() => {
         <FormSelect
           name="status"
           value={maintenanceRequestStore.formData.status}
+          disabled={maintenanceRequestStore.isInputDisabled}
           onChange={(e: ChangeEvent<HTMLSelectElement>) => {
             maintenanceRequestStore.setFormData("status", e.target.value);
           }}
@@ -64,6 +66,7 @@ const NewRequest: React.FC = observer(() => {
           name="title"
           value={maintenanceRequestStore.formData.title}
           error={maintenanceRequestStore.errors.title}
+          disabled={maintenanceRequestStore.isInputDisabled}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             maintenanceRequestStore.setFormData("title", e.target.value);
           }}
@@ -75,6 +78,7 @@ const NewRequest: React.FC = observer(() => {
         <FormTextarea
           name="description"
           value={maintenanceRequestStore.formData.description}
+          disabled={maintenanceRequestStore.isInputDisabled}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
             maintenanceRequestStore.setFormData("description", e.target.value);
           }}
@@ -84,7 +88,8 @@ const NewRequest: React.FC = observer(() => {
       <Button
         type="submit"
         className="w-[268px] mt-4"
-        disabled={!maintenanceRequestStore.isFormFilled}
+        disabled={maintenanceRequestStore.isSubmitDisabled}
+        loading={maintenanceRequestStore.loadingAction}
       >
         Save
       </Button>
