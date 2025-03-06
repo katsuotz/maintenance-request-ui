@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, reaction } from "mobx";
 import { z } from "zod";
 import client from "@/utils/apollo-client";
 import {
@@ -35,12 +35,36 @@ class MaintenanceRequestStore {
     urgency: "",
     description: "",
   };
+  isFormFilled: boolean = false;
   errors: FormErrors = {};
   loading: boolean = true;
   error: string | null = null;
+  schema = z.object({
+    title: z.string().min(1, "Title is required"),
+    urgency: z.string().min(1, "Urgency is required"),
+  });
 
   constructor() {
     makeAutoObservable(this);
+
+    reaction(
+      () => this.formData.title,
+      (value) => {
+        this.validateField("title", value);
+      },
+    );
+    reaction(
+      () => this.formData.urgency,
+      (value) => {
+        this.validateField("urgency", value);
+      },
+    );
+    reaction(
+      () => this.formData,
+      (value) => {
+        this.isFormFilled = !!(value.title && value.urgency);
+      },
+    );
   }
 
   async fetchAllData() {
@@ -62,12 +86,17 @@ class MaintenanceRequestStore {
     this.formData[field] = value;
   }
 
-  validateForm(): boolean {
-    const schema = z.object({
-      title: z.string().min(1, "Title is required"),
-      urgency: z.string().min(1, "Urgency is required"),
-    });
+  validateField(field: MaintenanceRequestKey, value: string) {
+    const schema = this.schema;
+    const validation =
+      schema.shape[field as keyof typeof schema.shape].safeParse(value);
+    this.errors[field as keyof typeof schema.shape] = validation.success
+      ? undefined
+      : validation.error.errors[0].message;
+  }
 
+  validateForm(): boolean {
+    const schema = this.schema;
     const validation = schema.safeParse(this.formData);
     if (!validation.success) {
       const formattedErrors = validation.error.format();

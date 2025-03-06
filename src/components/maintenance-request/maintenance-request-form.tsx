@@ -81,7 +81,11 @@ const NewRequest: React.FC = observer(() => {
         />
       </FormGroup>
 
-      <Button type="submit" className="w-[268px] mt-4">
+      <Button
+        type="submit"
+        className="w-[268px] mt-4"
+        disabled={!maintenanceRequestStore.isFormFilled}
+      >
         Save
       </Button>
     </form>
