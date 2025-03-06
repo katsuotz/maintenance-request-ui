@@ -2,9 +2,12 @@ import { SelectHTMLAttributes } from "react";
 import { cn } from "@/utils/styleUtils";
 import { FiChevronDown } from "react-icons/fi";
 
-type SelectProps = SelectHTMLAttributes<HTMLSelectElement>;
+interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+  error?: string;
+}
 
 const FormSelect: React.FC<SelectProps> = ({
+  error,
   className,
   children,
   ...props
@@ -18,6 +21,7 @@ const FormSelect: React.FC<SelectProps> = ({
           "shadow-[0_8px_32px_0_rgba(110,113,145,.12)] backdrop-blur-md",
           "text-sm",
           "focus:outline-none",
+          error && 'border-danger',
           className,
         )}
         {...props}

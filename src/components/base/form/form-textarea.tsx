@@ -1,9 +1,11 @@
 import { TextareaHTMLAttributes } from "react";
 import { cn } from "@/utils/styleUtils";
 
-type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
+interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  error?: string;
+}
 
-const FormTextarea: React.FC<TextareaProps> = ({ className, ...props }) => {
+const FormTextarea: React.FC<TextareaProps> = ({ error, className, ...props }) => {
   return (
     <textarea
       className={cn(
@@ -12,6 +14,7 @@ const FormTextarea: React.FC<TextareaProps> = ({ className, ...props }) => {
         "shadow-[0_8px_32px_0_rgba(110,113,145,.12)] backdrop-blur-md",
         "text-sm",
         "focus:outline-none",
+        error && 'border-danger',
         className,
       )}
       {...props}

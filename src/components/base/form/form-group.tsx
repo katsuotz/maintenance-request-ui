@@ -8,7 +8,7 @@ const FormGroup: React.FC<GroupProps> = ({ error, children, ...props }) => {
   return (
     <div className="w-full flex flex-col gap-2" {...props}>
       {children}
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && <p className="text-danger text-sm">{error}</p>}
     </div>
   );
 };

@@ -63,6 +63,7 @@ class MaintenanceRequestStore {
       const formattedErrors = validation.error.format();
       this.errors = {
         title: formattedErrors.title?._errors[0] || "",
+        urgency: formattedErrors.urgency?._errors[0] || "",
       };
       return false;
     }

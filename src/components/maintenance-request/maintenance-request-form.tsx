@@ -27,6 +27,7 @@ const NewRequest: React.FC = observer(() => {
         <FormSelect
           name="urgency"
           value={maintenanceRequestStore.formData.urgency}
+          error={maintenanceRequestStore.errors.urgency}
           onChange={(e: ChangeEvent<HTMLSelectElement>) => {
             maintenanceRequestStore.formData.urgency = e.target.value;
           }}
@@ -62,6 +63,7 @@ const NewRequest: React.FC = observer(() => {
         <FormInput
           name="title"
           value={maintenanceRequestStore.formData.title}
+          error={maintenanceRequestStore.errors.title}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             maintenanceRequestStore.formData.title = e.target.value;
           }}
