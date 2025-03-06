@@ -32,7 +32,13 @@ const MaintenanceRequestUpdate: React.FC = observer(() => {
           <div className="animate-pulse rounded-md bg-black/10 h-10"></div>
         </div>
       ) : (
-        <MaintenanceRequestForm />
+        <>
+          {maintenanceRequestStore.error ? (
+            <p className="text-center">No maintenance request found.</p>
+          ) : (
+            <MaintenanceRequestForm />
+          )}
+        </>
       )}
     </div>
   );

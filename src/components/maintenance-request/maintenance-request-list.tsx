@@ -23,9 +23,6 @@ const MaintenanceRequestList = observer(() => {
       </div>
     );
 
-  if (maintenanceRequestStore.error)
-    return <p>{maintenanceRequestStore.error}</p>;
-
   return (
     <div className="w-full flex flex-col gap-4">
       {maintenanceRequestStore.listData.length > 0 ? (
