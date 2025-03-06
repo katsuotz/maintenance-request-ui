@@ -1,11 +1,14 @@
-import {HTMLAttributes} from "react";
+import { HTMLAttributes } from "react";
 
-type GroupProps = HTMLAttributes<HTMLElement>
+interface GroupProps extends HTMLAttributes<HTMLElement> {
+  error?: string;
+}
 
-const FormGroup: React.FC<GroupProps> = ({children, ...props}) => {
+const FormGroup: React.FC<GroupProps> = ({ error, children, ...props }) => {
   return (
     <div className="w-full flex flex-col gap-2" {...props}>
       {children}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
 };
