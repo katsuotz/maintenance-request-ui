@@ -19,7 +19,9 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({
       ) : (
         <span className="text-[#36A388] lg:text-5xl text-4xl">{value}</span>
       )}
-      <p className="text-[10px] lg:text-xs leading-tight lg:leading-normal lg:mt-0.5">{label}</p>
+      <p className="text-[10px] lg:text-xs leading-tight lg:leading-normal lg:mt-0.5">
+        {label}
+      </p>
     </Card>
   );
 };

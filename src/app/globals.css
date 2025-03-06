@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
 :root {
-    --background: #f8f8ff;
-    --foreground: #404040;
+  --background: #f8f8ff;
+  --foreground: #404040;
 }
 
 @theme inline {
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --font-sans: "Inter", sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Inter", sans-serif;
 
-    --color-primary: #36a388;
-    --color-success: #24bf5f;
-    --color-warning: #e3903f;
-    --color-danger: #d74b4b;
-    --color-info: #157ad8;
-    --color-secondary: #a1afc3;
+  --color-primary: #36a388;
+  --color-success: #24bf5f;
+  --color-warning: #e3903f;
+  --color-danger: #d74b4b;
+  --color-info: #157ad8;
+  --color-secondary: #a1afc3;
 }
 
 body {
-    background: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-sans);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
 }
 
 .container {
-    @apply mx-auto flex flex-col items-center mt-14 lg:mt-24 pb-10 lg:pb-20 px-4 gap-4 lg:gap-8 max-w-[636px] relative;
+  @apply mx-auto flex flex-col items-center mt-14 lg:mt-24 pb-10 lg:pb-20 px-4 gap-4 lg:gap-8 max-w-[636px] relative;
 }

@@ -17,22 +17,25 @@ const Button: React.FC<ButtonProps> = ({
   to,
   ...props
 }) => {
-  const buttonVariants = cva("text-white px-4 py-2.5 cursor-pointer text-lg", {
-    variants: {
-      variant: {
-        primary: "bg-primary",
-        secondary: "bg-secondary",
+  const buttonVariants = cva(
+    "text-white px-4 py-2.5 cursor-pointer text-lg disabled:opacity-40 disabled:cursor-not-allowed",
+    {
+      variants: {
+        variant: {
+          primary: "bg-primary",
+          secondary: "bg-secondary",
+        },
+        rounded: {
+          true: "rounded-full",
+          false: "rounded",
+        },
       },
-      rounded: {
-        true: "rounded-full",
-        false: "rounded",
+      defaultVariants: {
+        variant: "primary",
+        rounded: false,
       },
     },
-    defaultVariants: {
-      variant: "primary",
-      rounded: false,
-    },
-  });
+  );
 
   const classes = cn(buttonVariants({ variant, rounded }), className);
 
