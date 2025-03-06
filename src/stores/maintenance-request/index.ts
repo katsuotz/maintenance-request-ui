@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { z } from "zod";
 import client from "@/utils/apollo-client";
 import {
@@ -79,18 +79,24 @@ class MaintenanceRequestStore {
     return !this.isFormFilled || this.isResolved || this.loadingAction;
   }
 
-  async fetchAllData() {
+  async fetchAllData(forceRefetch = false) {
     try {
       this.loading = true;
+
       const { data } = await client.query({
         query: GET_MAINTENANCE_REQUESTS,
+        fetchPolicy: forceRefetch ? "network-only" : "cache-first",
       });
 
-      this.listData = data.maintenanceRequests;
-      this.loading = false;
+      runInAction(() => {
+        this.listData = data.maintenanceRequests;
+        this.loading = false;
+      });
     } catch (err) {
-      this.error = err instanceof Error ? err.message : "An error occurred";
-      this.loading = false;
+      runInAction(() => {
+        this.error = err instanceof Error ? err.message : "An error occurred";
+        this.loading = false;
+      });
     }
   }
 

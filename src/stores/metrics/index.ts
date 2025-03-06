@@ -1,4 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import maintenanceRequestStore from "@/stores/maintenance-request";
 
 interface MetricsData {
   openRequests: number;
@@ -15,7 +16,7 @@ class MetricsStore {
 
   error: string | null = null;
   loading: boolean = true;
-  eventSource: EventSource | null = null; // Store SSE connection
+  eventSource: EventSource | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -31,11 +32,15 @@ class MetricsStore {
 
     this.eventSource.onmessage = (event) => {
       try {
-        this.data = JSON.parse(event.data);
-        this.loading = false;
+        const newData = JSON.parse(event.data);
+
+        runInAction(() => {
+          this.data = newData;
+          maintenanceRequestStore.fetchAllData(true);
+          this.loading = false;
+        });
       } catch (error) {
-        const err = error as never;
-        console.error(err);
+        console.error(error);
         runInAction(() => {
           this.error = "Failed to parse SSE data";
           this.loading = false;
