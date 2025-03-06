@@ -1,7 +1,9 @@
+"use client";
+
 import Card from "@/components/base/card";
-import MaintenanceRequestCard from "@/components/maintenance-request/maintenance-request-card";
 import Button from "@/components/base/button";
-import { FiPlus } from "react-icons/fi";
+import {FiPlus} from "react-icons/fi";
+import MaintenanceRequestList from "@/components/maintenance-request/maintenance-request-list";
 
 export default function Home() {
   return (
@@ -22,39 +24,14 @@ export default function Home() {
         </Card>
       </div>
 
-      <div className="w-full flex flex-col gap-4">
-        <MaintenanceRequestCard
-          title={"Front Door Lock broken"}
-          date={"11 Dec 2024"}
-          urgent={"non_urgent"}
-          status={"open"}
-        />
-        <MaintenanceRequestCard
-          title={"Front Door Lock broken"}
-          date={"11 Dec 2024"}
-          urgent={"less_urgent"}
-          status={"resolved"}
-        />
-        <MaintenanceRequestCard
-          title={"Front Door Lock broken"}
-          date={"11 Dec 2024"}
-          urgent={"urgent"}
-          status={"resolved"}
-        />
-        <MaintenanceRequestCard
-          title={"Front Door Lock broken"}
-          date={"11 Dec 2024"}
-          urgent={"emergency"}
-          status={"resolved"}
-        />
-      </div>
+      <MaintenanceRequestList/>
 
       <Button
         rounded
         className="size-13 p-0 flex justify-center items-center absolute right-0 bottom-0"
-        to="/new-request"
+        to="/request/create"
       >
-        <FiPlus className="size-4.5" />
+        <FiPlus className="size-4.5"/>
       </Button>
     </div>
   );

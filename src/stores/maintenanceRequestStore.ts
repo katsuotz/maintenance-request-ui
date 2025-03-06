@@ -1,11 +1,15 @@
-import { makeAutoObservable } from "mobx";
-import { z } from "zod";
+import {makeAutoObservable, runInAction} from "mobx";
+import {z} from "zod";
+import {gql} from "@apollo/client";
+import client from "@/utils/apollo-client";
 
-interface FormData {
+export interface MaintenanceRequestInterface {
+  id?: string;
   title: string;
   description: string;
   status: string;
   urgency: string;
+  createdAt?: string;
 }
 
 interface FormErrors {
@@ -13,19 +17,56 @@ interface FormErrors {
   urgency?: string;
 }
 
-export type maintenanceRequestKey = keyof FormData;
+export type maintenanceRequestKey = keyof MaintenanceRequestInterface;
+
+const GET_MAINTENANCE_REQUESTS = gql`
+    query {
+        maintenanceRequests {
+            id
+            title
+            description
+            status
+            urgency
+            resolvedAt
+            createdAt
+            updatedAt
+        }
+    }
+`;
 
 class RequestStore {
-  formData: FormData = {
+  listData: MaintenanceRequestInterface[] = [];
+  formData: MaintenanceRequestInterface = {
     title: "",
     status: "open",
     urgency: "",
     description: "",
   };
   errors: FormErrors = {};
+  loading: boolean = false;
+  error: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  async fetchAllData() {
+    try {
+      this.loading = true
+      const {data} = await client.query({
+        query: GET_MAINTENANCE_REQUESTS,
+      });
+
+      runInAction(() => {
+        this.listData = data.maintenanceRequests;
+        this.loading = false
+      })
+    } catch (err) {
+      runInAction(() => {
+        this.error = err instanceof Error ? err.message : "An error occurred";
+        this.loading = false
+      })
+    }
   }
 
   setFormData(field: maintenanceRequestKey, value: string) {

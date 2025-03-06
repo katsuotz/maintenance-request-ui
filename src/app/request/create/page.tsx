@@ -2,7 +2,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import Link from "next/link";
 import MaintenanceRequestForm from "@/components/maintenance-request/maintenance-request-form";
 
-export default function NewRequest() {
+export default function MaintenanceRequestCreate() {
   return (
     <div className="container mx-auto flex flex-col items-center mt-24 gap-8 max-w-[636px] relative pb-20">
       <div className="flex items-center gap-4">
