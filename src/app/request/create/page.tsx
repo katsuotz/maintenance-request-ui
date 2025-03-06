@@ -4,7 +4,7 @@ import MaintenanceRequestForm from "@/components/maintenance-request/maintenance
 
 export default function MaintenanceRequestCreate() {
   return (
-    <div className="container mx-auto flex flex-col items-center mt-24 gap-8 max-w-[636px] relative pb-20">
+    <div className="container">
       <div className="flex items-center gap-4">
         <Link href="/">
           <FiArrowLeft className="size-5" />

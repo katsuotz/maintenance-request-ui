@@ -13,7 +13,7 @@ const MetricsData = observer(() => {
   }, []);
 
   return (
-    <div className="flex gap-8">
+    <div className="flex lg:gap-8 gap-3">
       <MetricsCard
         value={metricsStore.data.openRequests}
         label="Open Requests"

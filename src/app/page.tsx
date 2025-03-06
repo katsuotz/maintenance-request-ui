@@ -7,7 +7,7 @@ import MetricsData from "@/components/metrics/metrics-data";
 
 export default function Home() {
   return (
-    <div className="container mx-auto flex flex-col items-center mt-24 gap-8 max-w-[636px] relative pb-20">
+    <div className="container">
       <h1 className="text-2xl font-bold">Maintenance Request</h1>
       <MetricsData />
       <MaintenanceRequestList />

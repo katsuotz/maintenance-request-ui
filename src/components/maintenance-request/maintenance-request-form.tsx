@@ -19,7 +19,7 @@ const NewRequest: React.FC = observer(() => {
 
   return (
     <form
-      className="flex flex-col gap-6 w-full items-center"
+      className="flex flex-col gap-6 w-full items-center mt-4"
       onSubmit={handleSubmit}
     >
       <FormGroup error={maintenanceRequestStore.errors.urgency}>
