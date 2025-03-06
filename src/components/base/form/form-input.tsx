@@ -1,11 +1,11 @@
-import {InputHTMLAttributes} from "react";
-import {cn} from "@/utils/styleUtils";
+import { InputHTMLAttributes } from "react";
+import { cn } from "@/utils/styleUtils";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-const FormInput: React.FC<InputProps> = ({error, className, ...props}) => {
+const FormInput: React.FC<InputProps> = ({ error, className, ...props }) => {
   return (
     <input
       className={cn(
@@ -14,7 +14,7 @@ const FormInput: React.FC<InputProps> = ({error, className, ...props}) => {
         "shadow-[0_8px_32px_0_rgba(110,113,145,.12)] backdrop-blur-md",
         "text-sm",
         "focus:outline-none",
-        error && 'border-danger',
+        error && "border-danger",
         className,
       )}
       {...props}

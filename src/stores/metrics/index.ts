@@ -33,7 +33,9 @@ class MetricsStore {
       try {
         this.data = JSON.parse(event.data);
         this.loading = false;
-      } catch (error: any) {
+      } catch (error) {
+        const err = error as never;
+        console.error(err);
         runInAction(() => {
           this.error = "Failed to parse SSE data";
           this.loading = false;

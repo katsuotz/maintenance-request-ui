@@ -21,9 +21,15 @@ interface FormErrors {
   urgency?: string;
 }
 
+type MaintenanceRequestForm = Pick<
+  MaintenanceRequestInterface,
+  "title" | "description" | "status" | "urgency"
+>;
+type MaintenanceRequestKey = keyof MaintenanceRequestForm;
+
 class MaintenanceRequestStore {
   listData: MaintenanceRequestInterface[] = [];
-  formData: MaintenanceRequestInterface = {
+  formData: MaintenanceRequestForm = {
     title: "",
     status: "open",
     urgency: "",
@@ -50,6 +56,10 @@ class MaintenanceRequestStore {
       this.error = err instanceof Error ? err.message : "An error occurred";
       this.loading = false;
     }
+  }
+
+  setFormData(field: MaintenanceRequestKey, value: string) {
+    this.formData[field] = value;
   }
 
   validateForm(): boolean {

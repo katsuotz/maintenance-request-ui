@@ -21,7 +21,7 @@ const FormSelect: React.FC<SelectProps> = ({
           "shadow-[0_8px_32px_0_rgba(110,113,145,.12)] backdrop-blur-md",
           "text-sm",
           "focus:outline-none",
-          error && 'border-danger',
+          error && "border-danger",
           className,
         )}
         {...props}

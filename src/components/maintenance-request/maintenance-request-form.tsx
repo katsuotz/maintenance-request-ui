@@ -29,7 +29,7 @@ const NewRequest: React.FC = observer(() => {
           value={maintenanceRequestStore.formData.urgency}
           error={maintenanceRequestStore.errors.urgency}
           onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-            maintenanceRequestStore.formData.urgency = e.target.value;
+            maintenanceRequestStore.setFormData("urgency", e.target.value);
           }}
         >
           <option value="">Choose Urgency</option>
@@ -47,7 +47,7 @@ const NewRequest: React.FC = observer(() => {
           name="status"
           value={maintenanceRequestStore.formData.status}
           onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-            maintenanceRequestStore.formData.status = e.target.value;
+            maintenanceRequestStore.setFormData("status", e.target.value);
           }}
         >
           {Object.entries(Status).map(([key, label]) => (
@@ -65,7 +65,7 @@ const NewRequest: React.FC = observer(() => {
           value={maintenanceRequestStore.formData.title}
           error={maintenanceRequestStore.errors.title}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            maintenanceRequestStore.formData.title = e.target.value;
+            maintenanceRequestStore.setFormData("title", e.target.value);
           }}
         />
       </FormGroup>
@@ -76,7 +76,7 @@ const NewRequest: React.FC = observer(() => {
           name="description"
           value={maintenanceRequestStore.formData.description}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-            maintenanceRequestStore.formData.description = e.target.value;
+            maintenanceRequestStore.setFormData("description", e.target.value);
           }}
         />
       </FormGroup>
