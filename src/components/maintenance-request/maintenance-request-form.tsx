@@ -9,12 +9,12 @@ import FormTextarea from "@/components/base/form/form-textarea";
 import { ChangeEvent, FormEvent } from "react";
 import FormSelect from "@/components/base/form/form-select";
 import { Status, UrgencyLevel } from "@/utils/const";
-import maintenanceRequest from "@/stores/maintenance-request";
+import maintenanceRequestStore from "@/stores/maintenance-request";
 
 const NewRequest: React.FC = observer(() => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    maintenanceRequest.submitForm();
+    maintenanceRequestStore.submitForm();
   };
 
   return (
@@ -22,13 +22,13 @@ const NewRequest: React.FC = observer(() => {
       className="flex flex-col gap-6 w-full items-center"
       onSubmit={handleSubmit}
     >
-      <FormGroup error={maintenanceRequest.errors.urgency}>
+      <FormGroup error={maintenanceRequestStore.errors.urgency}>
         <FormLabel label="Urgency *" />
         <FormSelect
           name="urgency"
-          value={maintenanceRequest.formData.urgency}
+          value={maintenanceRequestStore.formData.urgency}
           onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-            maintenanceRequest.formData.urgency = e.target.value;
+            maintenanceRequestStore.formData.urgency = e.target.value;
           }}
         >
           <option value="">Choose Urgency</option>
@@ -44,9 +44,9 @@ const NewRequest: React.FC = observer(() => {
         <FormLabel label="Status" />
         <FormSelect
           name="status"
-          value={maintenanceRequest.formData.status}
+          value={maintenanceRequestStore.formData.status}
           onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-            maintenanceRequest.formData.status = e.target.value;
+            maintenanceRequestStore.formData.status = e.target.value;
           }}
         >
           {Object.entries(Status).map(([key, label]) => (
@@ -57,13 +57,13 @@ const NewRequest: React.FC = observer(() => {
         </FormSelect>
       </FormGroup>
 
-      <FormGroup error={maintenanceRequest.errors.title}>
+      <FormGroup error={maintenanceRequestStore.errors.title}>
         <FormLabel label="Title *" />
         <FormInput
           name="title"
-          value={maintenanceRequest.formData.title}
+          value={maintenanceRequestStore.formData.title}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            maintenanceRequest.formData.title = e.target.value;
+            maintenanceRequestStore.formData.title = e.target.value;
           }}
         />
       </FormGroup>
@@ -72,9 +72,9 @@ const NewRequest: React.FC = observer(() => {
         <FormLabel label="Description" />
         <FormTextarea
           name="description"
-          value={maintenanceRequest.formData.description}
+          value={maintenanceRequestStore.formData.description}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-            maintenanceRequest.formData.description = e.target.value;
+            maintenanceRequestStore.formData.description = e.target.value;
           }}
         />
       </FormGroup>

@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { z } from "zod";
 import client from "@/utils/apollo-client";
 import {
@@ -21,9 +21,7 @@ interface FormErrors {
   urgency?: string;
 }
 
-export type maintenanceRequestKey = keyof MaintenanceRequestInterface;
-
-class RequestStore {
+class MaintenanceRequestStore {
   listData: MaintenanceRequestInterface[] = [];
   formData: MaintenanceRequestInterface = {
     title: "",
@@ -117,5 +115,5 @@ class RequestStore {
   }
 }
 
-const requestStore = new RequestStore();
-export default requestStore;
+const maintenanceRequestStore = new MaintenanceRequestStore();
+export default maintenanceRequestStore;

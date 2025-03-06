@@ -1,20 +1,35 @@
 import { observer } from "mobx-react-lite";
 import MaintenanceRequestCard from "@/components/maintenance-request/maintenance-request-card";
 import { useEffect } from "react";
-import maintenanceRequest from "@/stores/maintenance-request";
+import Card from "@/components/base/card";
+import maintenanceRequestStore from "@/stores/maintenance-request";
 
 const MaintenanceRequestList = observer(() => {
   useEffect(() => {
-    maintenanceRequest.fetchAllData();
+    maintenanceRequestStore.fetchAllData();
   }, []);
 
-  if (maintenanceRequest.loading) return <p>Loading...</p>;
-  if (maintenanceRequest.error) return <p>Error: {maintenanceRequest.error}</p>;
+  if (maintenanceRequestStore.loading)
+    return (
+      <div className="w-full flex flex-col gap-4">
+        {[...Array(4)].map((_, index) => (
+          <Card key={index} className="w-full">
+            <div className="space-y-2">
+              <div className="animate-pulse rounded-md bg-black/10 h-4 w-[250px]"></div>
+              <div className="animate-pulse rounded-md bg-black/10 h-4 w-[200px]"></div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    );
+
+  if (maintenanceRequestStore.error)
+    return <p>{maintenanceRequestStore.error}</p>;
 
   return (
     <div className="w-full flex flex-col gap-4">
-      {maintenanceRequest.listData.length > 0 ? (
-        maintenanceRequest.listData.map((request) => (
+      {maintenanceRequestStore.listData.length > 0 ? (
+        maintenanceRequestStore.listData.map((request) => (
           <MaintenanceRequestCard key={request.id} request={request} />
         ))
       ) : (

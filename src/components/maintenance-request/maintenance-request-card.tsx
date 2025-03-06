@@ -3,7 +3,7 @@ import { cn } from "@/utils/styleUtils";
 import Card from "@/components/base/card";
 import Badge from "@/components/base/badge";
 import dayjs from "dayjs";
-import maintenanceRequest, {
+import maintenanceRequestStore, {
   MaintenanceRequestInterface,
 } from "@/stores/maintenance-request";
 import { observer } from "mobx-react-lite";
@@ -25,44 +25,44 @@ const MaintenanceRequestCard = observer<MaintenanceRequestCardProps>(
         </div>
         <div className="flex items-center justify-between">
           {request.urgency === "non_urgent" && (
-            <p className="text-primary font-light inline-flex items-center gap-1">
+            <div className="text-primary font-light inline-flex items-center gap-1">
               <img
                 className="size-4"
                 alt="non urgent icon"
                 src="https://em-content.zobj.net/source/apple/391/slightly-smiling-face_1f642.png"
               />
               Non Urgent
-            </p>
+            </div>
           )}
           {request.urgency === "less_urgent" && (
-            <p className="text-info font-light inline-flex items-center gap-1">
+            <div className="text-info font-light inline-flex items-center gap-1">
               <img
                 className="size-4"
                 alt="less urgent icon"
                 src="https://em-content.zobj.net/source/apple/391/hammer_1f528.png"
               />
               Less Urgent
-            </p>
+            </div>
           )}
           {request.urgency === "urgent" && (
-            <p className="text-warning font-light inline-flex items-center gap-1">
+            <div className="text-warning font-light inline-flex items-center gap-1">
               <img
                 className="size-4"
                 alt="urgent icon"
                 src="https://em-content.zobj.net/source/apple/391/high-voltage_26a1.png"
               />
               Urgent
-            </p>
+            </div>
           )}
           {request.urgency === "emergency" && (
-            <p className="text-danger font-light inline-flex items-center gap-1">
+            <div className="text-danger font-light inline-flex items-center gap-1">
               <img
                 className="size-4"
                 alt="emergency icon"
                 src="https://em-content.zobj.net/source/apple/391/fire_1f525.png"
               />
               Emergency
-            </p>
+            </div>
           )}
 
           <Badge
@@ -71,7 +71,7 @@ const MaintenanceRequestCard = observer<MaintenanceRequestCardProps>(
             className={cn(request.status === "open" && "cursor-pointer")}
             onClick={() => {
               if (request.status === "open") {
-                maintenanceRequest.markAsResolved(request);
+                maintenanceRequestStore.markAsResolved(request);
               }
             }}
           >
