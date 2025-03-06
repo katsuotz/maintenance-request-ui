@@ -2,7 +2,7 @@
 
 import Card from "@/components/base/card";
 import Button from "@/components/base/button";
-import {FiPlus} from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
 import MaintenanceRequestList from "@/components/maintenance-request/maintenance-request-list";
 
 export default function Home() {
@@ -24,14 +24,14 @@ export default function Home() {
         </Card>
       </div>
 
-      <MaintenanceRequestList/>
+      <MaintenanceRequestList />
 
       <Button
         rounded
         className="size-13 p-0 flex justify-center items-center absolute right-0 bottom-0"
         to="/request/create"
       >
-        <FiPlus className="size-4.5"/>
+        <FiPlus className="size-4.5" />
       </Button>
     </div>
   );

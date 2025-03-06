@@ -1,28 +1,28 @@
 import React from "react";
-import {cn} from "@/utils/styleUtils";
+import { cn } from "@/utils/styleUtils";
 import Card from "@/components/base/card";
 import Badge from "@/components/base/badge";
 import dayjs from "dayjs";
 import Link from "next/link";
-import {MaintenanceRequestInterface} from "@/stores/maintenanceRequestStore";
+import { MaintenanceRequestInterface } from "@/stores/maintenance-request";
 
 type MaintenanceRequestCardProps = {
-  request: MaintenanceRequestInterface
+  request: MaintenanceRequestInterface;
   className?: string;
 };
 
 const MaintenanceRequestCard: React.FC<MaintenanceRequestCardProps> = ({
-                                                                         request,
-                                                                         className,
-                                                                       }) => {
+  request,
+  className,
+}) => {
   return (
     <Link href={`/request/${request.id}`}>
       <Card className={cn("text-sm flex flex-col gap-2", className)}>
         <div className="flex items-center justify-between">
           <p>{request.title}</p>
           <span className="text-xs text-secondary">
-          {dayjs(request.createdAt).format("DD MMM YYYY")}
-        </span>
+            {dayjs(request.createdAt).format("DD MMM YYYY")}
+          </span>
         </div>
         <div className="flex items-center justify-between">
           {request.urgency === "non_urgent" && (
@@ -66,7 +66,10 @@ const MaintenanceRequestCard: React.FC<MaintenanceRequestCardProps> = ({
             </p>
           )}
 
-          <Badge variant={request.status === "open" ? "primary" : "secondary"} rounded>
+          <Badge
+            variant={request.status === "open" ? "primary" : "secondary"}
+            rounded
+          >
             {request.status === "open" ? "Mark as Resolved" : "Resolved"}
           </Badge>
         </div>

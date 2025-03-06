@@ -1,7 +1,10 @@
-import {makeAutoObservable, runInAction} from "mobx";
-import {z} from "zod";
-import {gql} from "@apollo/client";
+import { makeAutoObservable, runInAction } from "mobx";
+import { z } from "zod";
 import client from "@/utils/apollo-client";
+import {
+  CREATE_MAINTENANCE_REQUEST,
+  GET_MAINTENANCE_REQUESTS,
+} from "@/stores/maintenance-request/query";
 
 export interface MaintenanceRequestInterface {
   id?: string;
@@ -18,21 +21,6 @@ interface FormErrors {
 }
 
 export type maintenanceRequestKey = keyof MaintenanceRequestInterface;
-
-const GET_MAINTENANCE_REQUESTS = gql`
-    query {
-        maintenanceRequests {
-            id
-            title
-            description
-            status
-            urgency
-            resolvedAt
-            createdAt
-            updatedAt
-        }
-    }
-`;
 
 class RequestStore {
   listData: MaintenanceRequestInterface[] = [];
@@ -52,20 +40,20 @@ class RequestStore {
 
   async fetchAllData() {
     try {
-      this.loading = true
-      const {data} = await client.query({
+      this.loading = true;
+      const { data } = await client.query({
         query: GET_MAINTENANCE_REQUESTS,
       });
 
       runInAction(() => {
         this.listData = data.maintenanceRequests;
-        this.loading = false
-      })
+        this.loading = false;
+      });
     } catch (err) {
       runInAction(() => {
         this.error = err instanceof Error ? err.message : "An error occurred";
-        this.loading = false
-      })
+        this.loading = false;
+      });
     }
   }
 
@@ -76,6 +64,7 @@ class RequestStore {
   validateForm(): boolean {
     const schema = z.object({
       title: z.string().min(1, "Title is required"),
+      urgency: z.string().min(1, "Urgency is required"),
     });
 
     const validation = schema.safeParse(this.formData);
@@ -91,9 +80,34 @@ class RequestStore {
     return true;
   }
 
-  submitForm(): void {
+  async submitForm() {
     if (!this.validateForm()) return;
-    console.log("Form submitted successfully", this.formData);
+
+    try {
+      this.loading = true;
+      await client.mutate({
+        mutation: CREATE_MAINTENANCE_REQUEST,
+        variables: {
+          data: {
+            title: this.formData.title,
+            description: this.formData.description,
+            status: this.formData.status,
+            urgency: this.formData.urgency,
+          },
+        },
+      });
+
+      runInAction(() => {
+        this.loading = false;
+      });
+
+      window.location.href = "/";
+    } catch (err) {
+      runInAction(() => {
+        this.error = err instanceof Error ? err.message : "An error occurred";
+        this.loading = false;
+      });
+    }
   }
 }
 

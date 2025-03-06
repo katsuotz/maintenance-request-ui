@@ -1,24 +1,21 @@
 import { observer } from "mobx-react-lite";
 import MaintenanceRequestCard from "@/components/maintenance-request/maintenance-request-card";
-import {useEffect} from "react";
-import maintenanceRequestStore from "@/stores/maintenanceRequestStore";
+import { useEffect } from "react";
+import maintenanceRequest from "@/stores/maintenance-request";
 
 const Home = observer(() => {
   useEffect(() => {
-    maintenanceRequestStore.fetchAllData();
+    maintenanceRequest.fetchAllData();
   }, []);
 
-  if (maintenanceRequestStore.loading) return <p>Loading...</p>;
-  if (maintenanceRequestStore.error) return <p>Error: {maintenanceRequestStore.error}</p>;
+  if (maintenanceRequest.loading) return <p>Loading...</p>;
+  if (maintenanceRequest.error) return <p>Error: {maintenanceRequest.error}</p>;
 
   return (
     <div className="w-full flex flex-col gap-4">
-      {maintenanceRequestStore.listData.length > 0 ? (
-        maintenanceRequestStore.listData.map((request) => (
-          <MaintenanceRequestCard
-            key={request.id}
-            request={request}
-          />
+      {maintenanceRequest.listData.length > 0 ? (
+        maintenanceRequest.listData.map((request) => (
+          <MaintenanceRequestCard key={request.id} request={request} />
         ))
       ) : (
         <p className="text-center">No maintenance requests found.</p>
