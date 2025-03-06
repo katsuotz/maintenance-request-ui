@@ -2,13 +2,13 @@ import React from "react";
 import { cn } from "@/utils/styleUtils";
 import Card from "@/components/base/card";
 import Badge from "@/components/base/badge";
-import { Status, UrgencyLevel } from "@/utils/const";
+import { StatusValue, UrgencyLevelValue } from "@/utils/const";
 
 type MaintenanceRequestCardProps = {
   title: string;
   date: string;
-  urgent: UrgencyLevel;
-  status: Status;
+  urgent: UrgencyLevelValue;
+  status: StatusValue;
   className?: string;
 };
 
