@@ -3,20 +3,19 @@ import { cn } from "@/utils/styleUtils";
 import Card from "@/components/base/card";
 import Badge from "@/components/base/badge";
 import dayjs from "dayjs";
-import Link from "next/link";
-import { MaintenanceRequestInterface } from "@/stores/maintenance-request";
+import maintenanceRequest, {
+  MaintenanceRequestInterface,
+} from "@/stores/maintenance-request";
+import { observer } from "mobx-react-lite";
 
 type MaintenanceRequestCardProps = {
   request: MaintenanceRequestInterface;
   className?: string;
 };
 
-const MaintenanceRequestCard: React.FC<MaintenanceRequestCardProps> = ({
-  request,
-  className,
-}) => {
-  return (
-    <Link href={`/request/${request.id}`}>
+const MaintenanceRequestCard = observer<MaintenanceRequestCardProps>(
+  ({ request, className }) => {
+    return (
       <Card className={cn("text-sm flex flex-col gap-2", className)}>
         <div className="flex items-center justify-between">
           <p>{request.title}</p>
@@ -69,13 +68,19 @@ const MaintenanceRequestCard: React.FC<MaintenanceRequestCardProps> = ({
           <Badge
             variant={request.status === "open" ? "primary" : "secondary"}
             rounded
+            className={cn(request.status === "open" && "cursor-pointer")}
+            onClick={() => {
+              if (request.status === "open") {
+                maintenanceRequest.markAsResolved(request);
+              }
+            }}
           >
             {request.status === "open" ? "Mark as Resolved" : "Resolved"}
           </Badge>
         </div>
       </Card>
-    </Link>
-  );
-};
+    );
+  },
+);
 
 export default MaintenanceRequestCard;

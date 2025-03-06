@@ -3,7 +3,7 @@ import MaintenanceRequestCard from "@/components/maintenance-request/maintenance
 import { useEffect } from "react";
 import maintenanceRequest from "@/stores/maintenance-request";
 
-const Home = observer(() => {
+const MaintenanceRequestList = observer(() => {
   useEffect(() => {
     maintenanceRequest.fetchAllData();
   }, []);
@@ -24,4 +24,4 @@ const Home = observer(() => {
   );
 });
 
-export default Home;
+export default MaintenanceRequestList;

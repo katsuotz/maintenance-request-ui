@@ -29,3 +29,21 @@ export const CREATE_MAINTENANCE_REQUEST = gql`
     }
   }
 `;
+
+export const UPDATE_MAINTENANCE_REQUEST = gql`
+  mutation UpdateMaintenanceRequest(
+    $id: Int!
+    $data: UpdateMaintenanceRequestInput!
+  ) {
+    updateMaintenanceRequest(id: $id, data: $data) {
+      id
+      title
+      description
+      status
+      urgency
+      resolvedAt
+      createdAt
+      updatedAt
+    }
+  }
+`;

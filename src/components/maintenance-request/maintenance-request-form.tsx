@@ -9,20 +9,9 @@ import FormTextarea from "@/components/base/form/form-textarea";
 import { ChangeEvent, FormEvent } from "react";
 import FormSelect from "@/components/base/form/form-select";
 import { Status, UrgencyLevel } from "@/utils/const";
-import maintenanceRequest, {
-  maintenanceRequestKey,
-} from "@/stores/maintenance-request";
+import maintenanceRequest from "@/stores/maintenance-request";
 
 const NewRequest: React.FC = observer(() => {
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-  ) => {
-    maintenanceRequest.setFormData(
-      e.target.name as maintenanceRequestKey,
-      e.target.value,
-    );
-  };
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     maintenanceRequest.submitForm();
@@ -38,7 +27,9 @@ const NewRequest: React.FC = observer(() => {
         <FormSelect
           name="urgency"
           value={maintenanceRequest.formData.urgency}
-          onChange={handleChange}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+            maintenanceRequest.formData.urgency = e.target.value;
+          }}
         >
           <option value="">Choose Urgency</option>
           {Object.entries(UrgencyLevel).map(([key, label]) => (
@@ -54,7 +45,9 @@ const NewRequest: React.FC = observer(() => {
         <FormSelect
           name="status"
           value={maintenanceRequest.formData.status}
-          onChange={handleChange}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+            maintenanceRequest.formData.status = e.target.value;
+          }}
         >
           {Object.entries(Status).map(([key, label]) => (
             <option key={key} value={key}>
@@ -69,7 +62,9 @@ const NewRequest: React.FC = observer(() => {
         <FormInput
           name="title"
           value={maintenanceRequest.formData.title}
-          onChange={handleChange}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            maintenanceRequest.formData.title = e.target.value;
+          }}
         />
       </FormGroup>
 
@@ -78,7 +73,9 @@ const NewRequest: React.FC = observer(() => {
         <FormTextarea
           name="description"
           value={maintenanceRequest.formData.description}
-          onChange={handleChange}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+            maintenanceRequest.formData.description = e.target.value;
+          }}
         />
       </FormGroup>
 

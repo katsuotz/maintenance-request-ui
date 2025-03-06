@@ -3,11 +3,12 @@ import { cn } from "@/utils/styleUtils";
 import { cva } from "class-variance-authority";
 import { BadgeVariants } from "@/utils/const";
 
-type CardProps = {
+type BadgeProps = {
   variant?: BadgeVariants;
   rounded?: boolean;
   children?: ReactNode;
   className?: string;
+  onClick?: () => void;
 };
 
 const badgeVariants = cva("text-white text-xs px-2 py-1", {
@@ -27,14 +28,20 @@ const badgeVariants = cva("text-white text-xs px-2 py-1", {
   },
 });
 
-const Badge: React.FC<CardProps> = ({
+const Badge: React.FC<BadgeProps> = ({
   variant,
   rounded = false,
   children,
   className,
+  onClick,
+  ...props
 }) => {
   return (
-    <div className={cn(badgeVariants({ variant, rounded }), className)}>
+    <div
+      className={cn(badgeVariants({ variant, rounded }), className)}
+      onClick={onClick}
+      {...props}
+    >
       {children}
     </div>
   );

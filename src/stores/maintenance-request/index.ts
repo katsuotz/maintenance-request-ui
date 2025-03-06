@@ -4,10 +4,11 @@ import client from "@/utils/apollo-client";
 import {
   CREATE_MAINTENANCE_REQUEST,
   GET_MAINTENANCE_REQUESTS,
+  UPDATE_MAINTENANCE_REQUEST,
 } from "@/stores/maintenance-request/query";
 
 export interface MaintenanceRequestInterface {
-  id?: string;
+  id?: number;
   title: string;
   description: string;
   status: string;
@@ -31,7 +32,7 @@ class RequestStore {
     description: "",
   };
   errors: FormErrors = {};
-  loading: boolean = false;
+  loading: boolean = true;
   error: string | null = null;
 
   constructor() {
@@ -45,20 +46,12 @@ class RequestStore {
         query: GET_MAINTENANCE_REQUESTS,
       });
 
-      runInAction(() => {
-        this.listData = data.maintenanceRequests;
-        this.loading = false;
-      });
+      this.listData = data.maintenanceRequests;
+      this.loading = false;
     } catch (err) {
-      runInAction(() => {
-        this.error = err instanceof Error ? err.message : "An error occurred";
-        this.loading = false;
-      });
+      this.error = err instanceof Error ? err.message : "An error occurred";
+      this.loading = false;
     }
-  }
-
-  setFormData(field: maintenanceRequestKey, value: string) {
-    this.formData[field] = value;
   }
 
   validateForm(): boolean {
@@ -97,16 +90,29 @@ class RequestStore {
         },
       });
 
-      runInAction(() => {
-        this.loading = false;
-      });
-
+      this.loading = false;
       window.location.href = "/";
     } catch (err) {
-      runInAction(() => {
-        this.error = err instanceof Error ? err.message : "An error occurred";
-        this.loading = false;
+      this.error = err instanceof Error ? err.message : "An error occurred";
+      this.loading = false;
+    }
+  }
+
+  async markAsResolved(request: MaintenanceRequestInterface) {
+    try {
+      await client.mutate({
+        mutation: UPDATE_MAINTENANCE_REQUEST,
+        variables: {
+          id: request.id,
+          data: {
+            status: "resolved",
+          },
+        },
       });
+
+      request.status = "resolved";
+    } catch (err) {
+      this.error = err instanceof Error ? err.message : "An error occurred";
     }
   }
 }
